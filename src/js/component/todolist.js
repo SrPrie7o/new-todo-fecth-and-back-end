@@ -8,7 +8,7 @@ export const TodoList = () => {
 
 	const getfetchData = () => {
 		fetch(
-			"https://3000-4geeksacademy-flaskresth-tgr5khi77ku.ws-us38.gitpod.io/todo"
+			"https://3000-prietobyte-todobackend-an3pdga8urx.ws-us38.gitpod.io/todo"
 		)
 			.then((response) => response.json())
 			// .then((data) => console.log(data));
@@ -28,7 +28,7 @@ export const TodoList = () => {
 	const createTask = (e) => {
 		if (e.key === "Enter") {
 			fetch(
-				"https://3000-4geeksacademy-flaskresth-tgr5khi77ku.ws-us38.gitpod.io/todo",
+				"https://3000-prietobyte-todobackend-an3pdga8urx.ws-us38.gitpod.io/todo",
 				{
 					method: "POST",
 					headers: {
@@ -42,14 +42,14 @@ export const TodoList = () => {
 			)
 				.then((res) => res.json())
 				.then((result) => setTaskList(result))
-				.catch((err) => console.log("error"));
+				.catch((err) => console.log(err));
 			setInputValue("");
 		}
 	};
 
 	const deleteTask = (id) => {
 		fetch(
-			"https://3000-4geeksacademy-flaskresth-tgr5khi77ku.ws-us38.gitpod.io/todo/" +
+			"https://3000-prietobyte-todobackend-an3pdga8urx.ws-us38.gitpod.io/todo/" +
 				id,
 			{
 				method: "DELETE",
@@ -60,7 +60,26 @@ export const TodoList = () => {
 		)
 			.then((res) => res.json())
 			.then((result) => setTaskList(result))
-			.catch((err) => console.log("error"));
+			.catch((err) => console.log(err));
+	};
+
+	const editTask = (task) => {
+		task.done = !task.done;
+
+		fetch(
+			"https://3000-prietobyte-todobackend-an3pdga8urx.ws-us38.gitpod.io/todo/" +
+				task.id,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(task),
+			}
+		)
+			.then((res) => res.json())
+			.then((result) => setTaskList(result))
+			.catch((err) => console.log(err));
 	};
 
 	return (
@@ -77,14 +96,13 @@ export const TodoList = () => {
 			<ul className="list-group">
 				{taskList.map((task, index) => {
 					return (
-						<li
-							className="list-group-item"
-							onClick={() => deleteTask(task.id)}
-							key={index}>
+						<li className="list-group-item" key={index}>
 							{task.task}
 							<FontAwesomeIcon
+								onClick={() => deleteTask(task.id)}
 								className="iconPosition"
 								icon={faTrashCan}></FontAwesomeIcon>
+							<button onClick={() => editTask(task)}>III</button>
 						</li>
 					);
 				})}
